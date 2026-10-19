@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Check, ImagePlus, Loader2, Plus, Trash2, X } from 'lucide-react'
 import { LANGS, src, type L3, type Lang, type Spec } from '@/lib/types'
 
@@ -138,6 +138,11 @@ export function SpecsField({ value, onChange }: { value: Spec[]; onChange: (v: S
 }
 
 export function Drawer({ title, onClose, onDone, onDelete, children }: { title: string; onClose: () => void; onDone: () => void; onDelete?: () => void; children: React.ReactNode }) {
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', k)
+    return () => window.removeEventListener('keydown', k)
+  }, [onClose])
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-ink/30" onMouseDown={onClose}>
       <div className="flex h-full w-full max-w-[580px] flex-col bg-white shadow-2xl" onMouseDown={(e) => e.stopPropagation()} role="dialog" aria-label={title}>
